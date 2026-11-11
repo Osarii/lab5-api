@@ -1,185 +1,86 @@
-# Laboratorio #5: API REST con Express y Swagger integrando DeepSeek API
+# Laboratorio 5 — Notas + DeepSeek
 
-> **Programación Backend · Guía de Trabajo en Parejas**  
-> Repositorio oficial: [https://github.com/Osarii/lab5-api](https://github.com/Osarii/lab5-api)
+Adaptación funcional del laboratorio suministrado: Express 5, validación Zod, notas en memoria, preguntas y resúmenes con DeepSeek, y Swagger UI.
 
----
+Integrantes según el material original: Osarii (A: notas y documentación), Kendall (B: IA). Confirmar los nombres antes de entregar.
 
-## 👥 Integrantes y Roles
+## Ejecutar
 
-| Integrante | Rol | Responsabilidades | Rama de Trabajo |
-|---|---|---|---|
-| **Integrante A (Osarii)** | API y Documentación | Configuración Express y Swagger, CRUD de notas, validación con Zod, documentación Swagger de notas, pruebas cruzadas de IA. | `feature/notas` |
-| **Integrante B (Kendall)** | Integración con IA | Configuración de API Key de DeepSeek, servicio DeepSeek con cliente OpenAI (`baseURL: https://api.deepseek.com`), endpoints de IA (`/preguntar` y `/:id/resumen`), manejo centralizado de errores, documentación Swagger de IA, pruebas cruzadas de notas. | `feature/ia` |
+Requisito: Node.js 20 o superior.
 
----
-
-## 🧭 Tabla de Endpoints y Responsabilidades
-
-| Método | Endpoint | Descripción | Usa IA | Responsable |
-|---|---|---|:---:|:---:|
-| `GET` | `/api/notas` | Lista todas las notas en memoria | No | **A (Osarii)** |
-| `GET` | `/api/notas/:id` | Obtiene una nota específica (o 404) | No | **A (Osarii)** |
-| `POST` | `/api/notas` | Crea una nota (`titulo`, `contenido`) con Zod | No | **A (Osarii)** |
-| `DELETE` | `/api/notas/:id` | Elimina una nota (204 o 404) | No | **A (Osarii)** |
-| `POST` | `/api/ia/preguntar` | Envía una pregunta libre al modelo DeepSeek | **Sí** | **B (Kendall)** |
-| `POST` | `/api/notas/:id/resumen` | Resume una nota en 3 viñetas breves | **Sí** | **B (Kendall)** *(Punto de integración)* |
-| `GET` | `/api-docs` | Documentación interactiva Swagger UI | No | **A (Osarii)** |
-
----
-
-## 🛡️ Reglas de Oro para que Todo Funcione al Unirse (Contrato de Integración)
-
-Para que el trabajo en computadoras separadas no rompa el proyecto al hacer merge, ambos deben respetar estas **6 reglas estrictas**:
-
-### 1. El Contrato de Interfaces (No alterar nombres ni firmas)
-Antes de escribir código, se acordaron las siguientes funciones exactas:
-* **`src/services/notas.service.js` (escrito por A):**
-  * `listar()`: retorna arreglo de notas `[{ id, titulo, contenido }]`.
-  * `buscar(id)`: recibe `id` (número). Retorna la nota o lanza `AppError(404, 'Nota no encontrada')`.
-  * `crear({ titulo, contenido })`: asigna `nextId++` y retorna la nota creada.
-  * `eliminar(id)`: usa `buscar(id)` para validar existencia y elimina la nota.
-* **`src/services/deepseek.service.js` (escrito por B):**
-  * `async preguntar(texto, system)`: llama a DeepSeek y retorna `{ respuesta: string, uso: object }`. *(Existe también `claude.service.js` como alias para compatibilidad transparente).*
-
-### 2. Flujo Estricto de Ramas (Git Workflow)
-* **NADA se sube directo a `main`.**
-* Osarii trabaja en:
-  ```bash
-  git checkout -b feature/notas
-  ```
-* Kendall trabaja en:
-  ```bash
-  git checkout -b feature/ia
-  ```
-
-### 3. Mínimo 5 Commits por Integrante
-La rúbrica penaliza si no hay historial visible de commits propios de cada integrante. Hagan commits atómicos y descriptivos, por ejemplo:
-* *Integrante A:*
-  1. `feat(notas): implement service methods (listar, buscar, crear, eliminar)`
-  2. `feat(notas): add zod validation schema for notes`
-  3. `feat(notas): implement GET and POST /api/notas routes`
-  4. `feat(notas): implement GET and DELETE /api/notas/:id routes`
-  5. `docs(swagger): document notes endpoints with openapi annotations`
-* *Integrante B:*
-  1. `feat(deepseek): setup OpenAI-compatible client for DeepSeek API`
-  2. `feat(ia): implement POST /api/ia/preguntar route with zod validation`
-  3. `feat(errorHandler): handle DeepSeek API errors mapping to 429, 502, 503`
-  4. `feat(ia): implement POST /api/notas/:id/resumen endpoint`
-  5. `docs(swagger): document ia endpoints with openapi annotations`
-
-### 4. Punto de Conflicto Previsto y Resolución en Pull Request
-El endpoint `POST /api/notas/:id/resumen` se añade en `src/routes/notas.routes.js`.
-* **Flujo para integrar sin problemas:**
-  1. Integrante A termina `feature/notas`, abre PR a `main` y Kendall lo aprueba. Se hace merge de `feature/notas` en `main`.
-  2. Kendall en su rama `feature/ia` hace:
-     ```bash
-     git fetch origin
-     git merge origin/main
-     ```
-  3. Si hay conflicto en `src/routes/notas.routes.js` o en `src/middlewares/errorHandler.js`, se resuelve conservando el código de ambos: las rutas de notas de A + la ruta de resumen de B.
-  4. Kendall hace commit de la resolución y sube su PR `feature/ia` -> `main`. Osarii revisa, comenta y aprueba.
-
-### 5. Seguridad de Credenciales (Cero Fugas)
-* El archivo `.env` **JAMÁS se sube a GitHub ni se pasa por capturas**.
-* `.gitignore` ya contiene `node_modules/` y `.env`.
-* Antes de hacer cualquier `git add .`, ejecuten `git status` para confirmar que `.env` no aparece.
-
----
-
-## 🚀 Guía de Instalación y Ejecución
-
-### Prerrequisitos
-* Node.js v20 o superior (`node -v`)
-* Git (`git --version`)
-* API Key de DeepSeek (`https://platform.deepseek.com`)
-
-### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/Osarii/lab5-api.git
-cd lab5-api
-```
-
-### 2. Instalar dependencias
-```bash
-npm install
-```
-
-### 3. Configurar variables de entorno
-Copiar la plantilla `.env.example` a un nuevo archivo `.env`:
-```bash
+npm ci
 cp .env.example .env
-```
-Editar el archivo `.env`:
-```env
-DEEPSEEK_API_KEY=sk-TU_CLAVE_DEEPSEEK_AQUI
-DEEPSEEK_MODEL=deepseek-chat
-DEEPSEEK_BASE_URL=https://api.deepseek.com
-PORT=3000
-```
-
-### 4. Iniciar el servidor
-Modo desarrollo (con nodemon):
-```bash
-npm run dev
-```
-Modo producción:
-```bash
+# Editar .env y colocar DEEPSEEK_API_KEY
 npm start
 ```
 
-Abrir la documentación interactiva en el navegador:
-👉 **[http://localhost:3000/api-docs](http://localhost:3000/api-docs)**
+En PowerShell, usar `Copy-Item .env.example .env`.
+Abrir http://localhost:3000/api-docs y probar con “Try it out”. `npm run dev` activa recarga; `npm test` ejecuta las pruebas sin créditos.
 
----
+Crear la clave en https://platform.deepseek.com/api_keys y verificar saldo. La suscripción de chat no sustituye los créditos de API. No colocar la clave en Swagger, código, capturas ni Git.
 
-## 🧪 Pruebas Cruzadas desde Swagger UI (Paso 12)
+| Variable | Uso |
+|---|---|
+| DEEPSEEK_API_KEY | Clave privada del backend |
+| DEEPSEEK_MODEL | Modelo; ejemplo predeterminado en .env.example |
+| PORT | Puerto local; 3000 por defecto |
 
-| Caso de prueba | Resultado esperado | Quién lo prueba | Estado |
-|---|---|:---:|:---:|
-| Crear dos notas con `POST /api/notas` | `201` con id asignado | **B (Kendall)** | [ ] |
-| Listar con `GET /api/notas` | `200` con las dos notas | **B (Kendall)** | [ ] |
-| Pedir `GET /api/notas/99` (id inexistente) | `404 Nota no encontrada` | **B (Kendall)** | [ ] |
-| `POST /api/notas` con body vacío `{}` | `400` con detalles de Zod | **B (Kendall)** | [ ] |
-| Pregunta libre en `POST /api/ia/preguntar` ★ | `200` con respuesta y uso de tokens | **A (Osarii)** | [ ] |
-| Resumir la nota 1 con `POST /api/notas/1/resumen` ★ | `200` con resumen en 3 viñetas | **A (Osarii)** | [ ] |
-| Resumir una nota que no existe | `404` sin llamar a la IA | **A (Osarii)** | [ ] |
-| `POST /api/ia/preguntar` con pregunta de 1 letra | `400` sin llamar a la IA | **A (Osarii)** | [ ] |
-| Cambiar la API key por una falsa y preguntar ★ | `502 IA_NO_DISPONIBLE` y `401` en consola | **A (Osarii)** | [ ] |
-| `DELETE /api/notas/2` y luego `GET /api/notas/2` | `204` y después `404` | **B (Kendall)** | [ ] |
+El modelo predeterminado es `deepseek-flash`, comprobado en la documentación oficial consultada el 11/11/2026: https://api-docs.deepseek.com/. Las solicitudes usan `POST https://api.deepseek.com/chat/completions`, mensajes system/user, `thinking: {type: 'disabled'}`, `max_tokens: 1024` y timeout de 30 segundos. Se usa `fetch` nativo de Node, sin SDK Anthropic. El modelo se puede cambiar en .env. El proveedor determina los precios y disponibilidad.
 
-> 📸 Las capturas de pantalla de los 3 casos marcados con ★ se deben guardar en la carpeta `docs/`.
+## Endpoints
 
----
+| Método | Ruta | Éxito |
+|---|---|---|
+| GET | /api/notas | 200, lista |
+| POST | /api/notas | 201, nota creada |
+| GET | /api/notas/:id | 200, nota |
+| DELETE | /api/notas/:id | 204, sin cuerpo |
+| POST | /api/ia/preguntar | 200, respuesta y uso |
+| POST | /api/notas/:id/resumen | 200, notaId y resumen |
+| GET | /api-docs | Swagger UI |
 
-## 📝 Respuestas de Reflexión (Sección 6)
+La especificación completa está en `src/config/openapi.json` y se publica en `/api-docs.json`. Contiene esquemas, cuerpos, respuestas y errores. Se centralizó en OpenAPI JSON para que sea editable sin depender de comentarios YAML.
 
-### 1. ¿Por qué la API key no puede estar en el frontend? Describan cómo la podría obtener un usuario cualquiera.
-*Respuesta:* La API key no puede estar en el frontend porque todo el código enviado al navegador del cliente (HTML, JavaScript, bundles de cliente) es texto plano accesible para el usuario. Cualquier usuario puede abrir las herramientas de desarrollador (DevTools) presionando F12, ir a la pestaña **Network** (Red) o **Sources** (Fuentes), o inspeccionar el código compilado y extraer la clave directamente. Si un tercero obtiene la clave, puede consumirla para sus propios fines, generar costos financieros o agotar las cuotas del proyecto. Por esta razón, la clave reside únicamente en variables de entorno en el servidor backend, el cual actúa como un proxy seguro y autenticado.
+Crear una nota con:
+```json
+{"titulo":"Reunión","contenido":"Revisar la base de datos. Configurar la API. Desplegar a pruebas."}
+```
+Después ejecutar `POST /api/notas/1/resumen`. Para preguntar:
+```json
+{"pregunta":"¿Qué es Express.js?"}
+```
 
-### 2. ¿Qué responde su API cuando el proveedor de IA devuelve 401? ¿Por qué no se reenvía ese mismo 401 al cliente?
-*Respuesta:* Cuando el proveedor de IA (DeepSeek) devuelve un código de error `401 (authentication_error)`, nuestra API captura la excepción en el `errorHandler` centralizado y responde al cliente con un código `502 Bad Gateway` y el mensaje genérico `{ "error": "IA_NO_DISPONIBLE" }`. No se le reenvía el `401` al cliente porque el cliente no es el responsable del fallo de autenticación: el cliente no se autentica con DeepSeek, es nuestro servidor backend el que falló en autenticarse con el proveedor externo. Enviar un 401 al cliente indicaría falsamente que el usuario final no envió credenciales a nuestra API, además de que exponer detalles técnicos internos representa un riesgo de seguridad.
+Notas: título de 1–100 caracteres y contenido de 1–5000. Preguntas: 3–2000 caracteres. Se recortan espacios. IDs enteros positivos. Las notas desaparecen al reiniciar. El resumen solicita tres viñetas al modelo; el texto generado depende del proveedor.
 
-### 3. ¿Qué diferencia hay entre el parámetro `system` y el contenido de `messages`? Den un ejemplo de su prueba.
-*Respuesta:* 
-* El rol `system` define las directivas generales, la personalidad, el tono, las restricciones de formato y el rol del asistente de IA. Actúa como instrucción base permanente.
-* El rol `user` dentro de `messages` contiene la entrada concreta y la consulta del usuario final en el turno actual.
-* *Ejemplo de prueba:* En `/api/notas/:id/resumen`, el rol `system` se configuró como: `'Resume el texto en 3 viñetas breves, en español.'`, mientras que en `user` se envió el contenido de la nota: `[{ role: 'user', content: nota.contenido }]`.
+## Errores
 
-### 4. Anoten los `input_tokens` y `output_tokens` de dos de sus llamadas. ¿Qué parámetro les permite limitar el costo?
-*Respuesta:*
-* *Llamada 1 (Pregunta libre sobre Express):*
-  * `prompt_tokens (input)`: 28
-  * `completion_tokens (output)`: 135
-* *Llamada 2 (Resumen de nota en 3 viñetas):*
-  * `prompt_tokens (input)`: 44
-  * `completion_tokens (output)`: 62
-* *Parámetro para limitar el costo:* El parámetro `max_tokens` (configurado en 1024) restringe el número máximo de tokens de salida generados, impidiendo respuestas excesivamente largas y costosas. Adicionalmente, la validación con Zod `z.string().max(2000)` en el input limita los tokens de entrada antes de contactar a la API.
+- 400: body inválido, JSON mal formado o ID inválido.
+- 404: nota o ruta inexistente.
+- 413: cuerpo demasiado grande.
+- 429: límite del proveedor.
+- 502: DeepSeek rechaza la solicitud (incluidos 401 y saldo insuficiente), falla la conexión o devuelve contenido inválido/truncado.
+- 503: clave ausente (`IA_NO_CONFIGURADA`), timeout o servicio no disponible.
 
-### 5. ¿Qué pasaría si no validaran el body antes de llamar a la IA? Mencionen al menos dos consecuencias.
-*Respuesta:*
-1. **Desperdicio de créditos y costo financiero innecesario:** Si un usuario envía textos gigantescos (ej. megabytes de texto) o peticiones repetitivas sin sentido, se incurre en consumo de tokens innecesarios facturados en la cuenta de DeepSeek.
-2. **Errores no controlados y caída de la API (Denegación de servicio):** Si el body viene vacío `{}`, con tipos de datos erróneos (ej. números u objetos en vez de strings) o nulo, la llamada a la API lanzará un error de validación `400` del proveedor o el backend fallará con `TypeError: Cannot read properties of undefined`, degradando el servicio.
+Los fallos del proveedor responden `{ "error": "IA_NO_DISPONIBLE" }`; la consola solo registra el código. Las validaciones ocurren antes de llamar al proveedor.
 
-### 6. ¿Qué conflicto de Git tuvieron al integrar las ramas y cómo lo resolvieron?
-*Respuesta:* Al momento de integrar la rama `feature/ia` (Kendall) después de haber fusionado `feature/notas` (Osarii) en `main`, Git detectó un conflicto de fusión en el archivo `src/routes/notas.routes.js`. El conflicto ocurrió porque Osarii había definido las rutas CRUD básicas (`GET`, `POST`, `GET /:id`, `DELETE /:id`), mientras que Kendall añadió en el mismo archivo la importación del servicio de IA y el endpoint `POST /:id/resumen`. La resolución consistió en abrir el archivo en conflicto, mantener intactas todas las rutas del CRUD de Osarii e incorporar al final la ruta de resumen de Kendall, resolviendo los marcadores `<<<<<<<`, `=======` y `>>>>>>>` conjuntamente y verificando que los tests de ambos funcionaran antes del commit final de merge.
+## Verificación y evidencia
+
+`npm test` comprueba el flujo HTTP real de Express y simula solamente la frontera con DeepSeek. Incluye creación/listado/consulta/eliminación, validaciones, pregunta, resumen, no llamar a IA ante entradas inválidas, códigos externos, ausencia de clave, JSON incorrecto y disponibilidad de Swagger. Ver `docs/VERIFICACION.md`.
+
+No se efectuaron llamadas reales: no se suministró API key. Las respuestas y tokens de pruebas son simulados. Para la evidencia académica, capturar en Swagger la pregunta real, el resumen real y el error con clave inválida; guardar en docs sin mostrar credenciales. Las capturas locales incluidas, si las hay, prueban solo la documentación.
+
+## Reflexión
+
+1. Una clave en frontend se obtiene inspeccionando JavaScript, recursos descargados o solicitudes en DevTools. Por eso queda exclusivamente en el backend.
+2. Un 401 de DeepSeek se traduce a 502: es un fallo de autenticación entre nuestro servidor y el proveedor, no una solicitud de inicio de sesión del usuario de esta API. No se divulgan detalles internos.
+3. `system` define la tarea y el comportamiento; el mensaje `user` contiene la pregunta o el texto. Para preguntas se pide responder en español y para resúmenes se solicitan tres viñetas. Cambiar la instrucción del sistema a “resume en una frase” o “extrae palabras clave” cambia el formato esperado de la respuesta.
+4. DeepSeek reporta `prompt_tokens`, `completion_tokens` y `total_tokens` en `uso`. `max_tokens` limita la salida y la validación limita la entrada, por lo que ambas medidas ayudan a controlar el consumo. Las pruebas automatizadas usan una respuesta simulada; cualquier registro de consumo real debe capturarse durante una ejecución con una clave válida, sin publicar la clave.
+5. Sin validar se podrían gastar créditos en preguntas vacías o enormes y enviar tipos incorrectos que causen fallos externos. También se deteriora la experiencia del cliente.
+6. La integración conserva las rutas CRUD y añade el resumen compartiendo `notas.buscar(id)` y `deepseek.preguntar`. Si Git reporta conflictos al integrar ramas, se deben resolver conservando ambos contratos y documentar la solución efectivamente aplicada.
+
+## Alcance académico y Git
+
+El PDF original se conserva como referencia: exige Claude y el SDK Anthropic. Esta variante usa DeepSeek por petición del usuario; el docente debe aceptar esa sustitución para evaluar el criterio correspondiente.
+
+La rama `feature/ia` contiene la implementación, sus pruebas y los cambios documentados en commits separados. La clave permanece únicamente en `.env`, que está ignorado por Git. Los requisitos de trabajo en pareja, revisión del compañero y coevaluación requieren acciones reales de los integrantes. Ver `INSTRUCCIONES_AGENTE_KENDALL.md`.

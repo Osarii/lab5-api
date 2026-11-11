@@ -1,0 +1,314 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Lab 5: Notas + DeepSeek",
+    "version": "1.0.0",
+    "description": "Notas en memoria e integración de DeepSeek desde el backend."
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Pregunta": {
+        "type": "object",
+        "required": [
+          "pregunta"
+        ],
+        "properties": {
+          "pregunta": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 2000,
+            "example": "¿Qué es Express.js?"
+          }
+        }
+      },
+      "NotaEntrada": {
+        "type": "object",
+        "required": [
+          "titulo",
+          "contenido"
+        ],
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "contenido": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 5000
+          }
+        }
+      },
+      "Nota": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/NotaEntrada"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer"
+              }
+            }
+          }
+        ]
+      },
+      "RespuestaIA": {
+        "type": "object",
+        "properties": {
+          "respuesta": {
+            "type": "string"
+          },
+          "uso": {
+            "type": "object",
+            "description": "Consumo reportado por DeepSeek: prompt_tokens, completion_tokens y total_tokens.",
+            "additionalProperties": true
+          }
+        }
+      },
+      "Resumen": {
+        "type": "object",
+        "properties": {
+          "notaId": {
+            "type": "integer"
+          },
+          "resumen": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/notas": {
+      "get": {
+        "summary": "Listar notas",
+        "tags": [
+          "Notas"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación correcta",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Nota"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear nota",
+        "tags": [
+          "Notas"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operación correcta",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nota"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotaEntrada"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/notas/{id}": {
+      "get": {
+        "summary": "Obtener nota",
+        "tags": [
+          "Notas"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación correcta",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nota"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Nota no encontrada"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Eliminar nota",
+        "tags": [
+          "Notas"
+        ],
+        "responses": {
+          "204": {
+            "description": "Operación correcta"
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Nota no encontrada"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ]
+      }
+    },
+    "/api/ia/preguntar": {
+      "post": {
+        "summary": "Preguntar a DeepSeek",
+        "tags": [
+          "IA"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación correcta",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaIA"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos"
+          },
+          "429": {
+            "description": "Límite de solicitudes"
+          },
+          "502": {
+            "description": "IA_NO_DISPONIBLE"
+          },
+          "503": {
+            "description": "IA_NO_CONFIGURADA o IA_NO_DISPONIBLE"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pregunta"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/notas/{id}/resumen": {
+      "post": {
+        "summary": "Resumir nota en 3 viñetas con DeepSeek",
+        "tags": [
+          "Notas"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación correcta",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resumen"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Nota no encontrada"
+          },
+          "429": {
+            "description": "Límite de solicitudes"
+          },
+          "502": {
+            "description": "IA_NO_DISPONIBLE"
+          },
+          "503": {
+            "description": "IA_NO_CONFIGURADA o IA_NO_DISPONIBLE"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ]
+      }
+    },
+    "/api-docs": {
+      "get": {
+        "summary": "Abrir Swagger UI",
+        "tags": [
+          "Documentación"
+        ],
+        "responses": {
+          "200": {
+            "description": "Documentación HTML interactiva"
+          }
+        }
+      }
+    }
+  }
+}

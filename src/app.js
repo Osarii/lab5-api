@@ -10,5 +10,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(spec));
 app.use('/api/notas', require('./routes/notas.routes'));
 app.use('/api/ia', require('./routes/ia.routes'));
 
+app.get('/api-docs.json', (req, res) => res.json(spec));
+app.use((req, res) => res.status(404).json({ error: 'Ruta no encontrada' }));
 app.use(errorHandler); // siempre al final
 module.exports = app;
