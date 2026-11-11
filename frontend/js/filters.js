@@ -1,0 +1,3 @@
+window.VapeKing = window.VapeKing || {};
+VapeKing.state = { category: 'todos', brand: '', search: '', sort: 'featured' };
+VapeKing.filteredProducts = () => { let products = VapeKing.products.filter((product) => (VapeKing.state.category === 'todos' || product.category === VapeKing.state.category) && (!VapeKing.state.brand || product.brand === VapeKing.state.brand) && (!VapeKing.state.search || `${product.name} ${product.brand}`.toLowerCase().includes(VapeKing.state.search.toLowerCase()))); if (VapeKing.state.sort === 'price-low') products.sort((a, b) => a.price - b.price); if (VapeKing.state.sort === 'price-high') products.sort((a, b) => b.price - a.price); if (VapeKing.state.sort === 'rating') products.sort((a, b) => b.rating - a.rating); return products; };
