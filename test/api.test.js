@@ -68,3 +68,23 @@ test('JSON inválido y documentación', async () => {
   assert.ok(spec.components.schemas.Nota);
   assert.equal((await request('/no-existe')).status, 404);
 });
+
+test('límites de longitud para notas y preguntas', async () => {
+  const titulo100 = 'T'.repeat(100);
+  const contenido5000 = 'C'.repeat(5000);
+  assert.equal((await request('/api/notas', 'POST', {
+    titulo: titulo100,
+    contenido: contenido5000,
+  })).status, 201);
+  assert.equal((await request('/api/notas', 'POST', {
+    titulo: 'T'.repeat(101),
+    contenido: 'Contenido válido',
+  })).status, 400);
+  assert.equal((await request('/api/notas', 'POST', {
+    titulo: 'Título válido',
+    contenido: 'C'.repeat(5001),
+  })).status, 400);
+  assert.equal((await request('/api/ia/preguntar', 'POST', {
+    pregunta: 'P'.repeat(2001),
+  })).status, 400);
+});
