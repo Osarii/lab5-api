@@ -16,10 +16,93 @@ router.param('id', (req, res, next, value) => {
   req.notaId = id;
   next();
 });
+/**
+ * @openapi
+ * /api/notas:
+ *   get:
+ *     summary: Listar notas
+ *     tags: [Notas]
+ *     responses:
+ *       200:
+ *         description: Lista de notas
+ */
 router.get('/', (req, res) => res.json(notas.listar()));
+/**
+ * @openapi
+ * /api/notas:
+ *   post:
+ *     summary: Crear nota
+ *     tags: [Notas]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/NotaEntrada'
+ *     responses:
+ *       201:
+ *         description: Nota creada
+ *       400:
+ *         description: Datos inválidos
+ */
 router.post('/', validar(notaSchema), (req, res) => res.status(201).json(notas.crear(req.body)));
+/**
+ * @openapi
+ * /api/notas/{id}:
+ *   get:
+ *     summary: Obtener nota
+ *     tags: [Notas]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer, minimum: 1 }
+ *     responses:
+ *       200:
+ *         description: Nota encontrada
+ *       400:
+ *         description: ID inválido
+ *       404:
+ *         description: Nota no encontrada
+ */
 router.get('/:id', (req, res) => res.json(notas.buscar(req.notaId)));
+/**
+ * @openapi
+ * /api/notas/{id}:
+ *   delete:
+ *     summary: Eliminar nota
+ *     tags: [Notas]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer, minimum: 1 }
+ *     responses:
+ *       204:
+ *         description: Nota eliminada
+ *       400:
+ *         description: ID inválido
+ *       404:
+ *         description: Nota no encontrada
+ */
 router.delete('/:id', (req, res) => { notas.eliminar(req.notaId); res.status(204).end(); });
+/**
+ * @openapi
+ * /api/notas/{id}/resumen:
+ *   post:
+ *     summary: Resumir una nota con DeepSeek
+ *     tags: [Notas]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer, minimum: 1 }
+ *     responses:
+ *       200:
+ *         description: Resumen generado
+ *       404:
+ *         description: Nota no encontrada
+ */
 router.post('/:id/resumen', async (req, res) => {
   const nota = notas.buscar(req.notaId);
   const r = await deepseek.preguntar(nota.contenido,
