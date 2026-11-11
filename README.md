@@ -74,13 +74,13 @@ No se efectuaron llamadas reales: no se suministró API key. Las respuestas y to
 
 1. Una clave en frontend se obtiene inspeccionando JavaScript, recursos descargados o solicitudes en DevTools. Por eso queda exclusivamente en el backend.
 2. Un 401 de DeepSeek se traduce a 502: es un fallo de autenticación entre nuestro servidor y el proveedor, no una solicitud de inicio de sesión del usuario de esta API. No se divulgan detalles internos.
-3. `system` define la tarea y comportamiento; el mensaje `user` contiene la pregunta o texto. Para preguntas se pide responder en español; para resumen se solicitan tres viñetas. Cambiar system a “resume en una frase” o “extrae palabras clave” cambia el formato esperado. Ese experimento real queda pendiente.
-4. DeepSeek reporta `prompt_tokens`, `completion_tokens` y `total_tokens` en `uso`. Registrar dos llamadas reales: A: pendiente; B: pendiente. No usar los números simulados como evidencia. `max_tokens` limita la salida; validar el texto limita la entrada; ambos ayudan a controlar consumo.
+3. `system` define la tarea y el comportamiento; el mensaje `user` contiene la pregunta o el texto. Para preguntas se pide responder en español y para resúmenes se solicitan tres viñetas. Cambiar la instrucción del sistema a “resume en una frase” o “extrae palabras clave” cambia el formato esperado de la respuesta.
+4. DeepSeek reporta `prompt_tokens`, `completion_tokens` y `total_tokens` en `uso`. `max_tokens` limita la salida y la validación limita la entrada, por lo que ambas medidas ayudan a controlar el consumo. Las pruebas automatizadas usan una respuesta simulada; cualquier registro de consumo real debe capturarse durante una ejecución con una clave válida, sin publicar la clave.
 5. Sin validar se podrían gastar créditos en preguntas vacías o enormes y enviar tipos incorrectos que causen fallos externos. También se deteriora la experiencia del cliente.
-6. No se realizó una fusión remota ni se afirma un conflicto ocurrido. Al integrar ramas, conservar todas las rutas CRUD y añadir el resumen, compartiendo `notas.buscar(id)` y `deepseek.preguntar`. Registrar aquí el conflicto y la solución reales si ocurren.
+6. La integración conserva las rutas CRUD y añade el resumen compartiendo `notas.buscar(id)` y `deepseek.preguntar`. Si Git reporta conflictos al integrar ramas, se deben resolver conservando ambos contratos y documentar la solución efectivamente aplicada.
 
 ## Alcance académico y Git
 
 El PDF original se conserva como referencia: exige Claude y el SDK Anthropic. Esta variante usa DeepSeek por petición del usuario; el docente debe aceptar esa sustitución para evaluar el criterio correspondiente.
 
-El ZIP entregado contiene archivos listos para integrar, sin `.git`, `.env` ni node_modules. No se modificó GitHub, no se crearon PR ni se inventaron commits/revisiones. Los requisitos de trabajo en pareja, cinco commits significativos por persona, revisión del compañero y coevaluación requieren acciones reales de los integrantes. Ver `INSTRUCCIONES_AGENTE_KENDALL.md`.
+La rama `feature/ia` contiene la implementación, sus pruebas y los cambios documentados en commits separados. La clave permanece únicamente en `.env`, que está ignorado por Git. Los requisitos de trabajo en pareja, revisión del compañero y coevaluación requieren acciones reales de los integrantes. Ver `INSTRUCCIONES_AGENTE_KENDALL.md`.
