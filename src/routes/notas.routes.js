@@ -15,4 +15,16 @@ router.post('/', validar(notaSchema), (req, res) => {
   res.status(201).json(nuevaNota);
 });
 
+router.get('/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const nota = notas.buscar(id);
+  res.json(nota);
+});
+
+router.delete('/:id', (req, res) => {
+  const id = Number(req.params.id);
+  notas.eliminar(id);
+  res.status(204).send();
+});
+
 module.exports = router;
