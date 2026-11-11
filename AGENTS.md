@@ -1,14 +1,6 @@
-# Instrucciones para Agentes de IA en este Repositorio
+# Trabajo en esta adaptación
 
-> **Proveedor de IA Seleccionado:** DeepSeek API (`https://api.deepseek.com`, modelo `deepseek-chat` vía SDK de `openai`).
-
-Si estás ejecutando en el entorno o computadora de **Kendall (Integrante B)**:
-Por favor lee inmediatamente el archivo [`INSTRUCCIONES_AGENTE_KENDALL.md`](./INSTRUCCIONES_AGENTE_KENDALL.md).
-
-Ese archivo contiene:
-1. El rol asignado a Kendall (Integrante B: Integración con DeepSeek API).
-2. La rama de trabajo obligatoria (`feature/ia`).
-3. El código exacto para `src/services/deepseek.service.js`, `src/routes/ia.routes.js`, `src/middlewares/errorHandler.js` y el endpoint `POST /api/notas/:id/resumen`.
-4. La secuencia de 5 commits requeridos por la rúbrica del laboratorio.
-5. El protocolo de resolución de conflictos de fusión con `main`.
-6. Regla de seguridad: NUNCA añadir ni commitear `.env` en Git.
+Proveedor solicitado: DeepSeek. Consultar README.md e INSTRUCCIONES_AGENTE_KENDALL.md.
+Mantener claves exclusivamente en .env ignorado. No imprimir ni publicar claves.
+Verificar cambios con npm test. El PDF original describe Claude; no restaurar ese proveedor sin petición del usuario.
+Las publicaciones, revisiones y evidencias académicas deben corresponder a acciones reales.

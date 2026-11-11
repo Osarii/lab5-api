@@ -1,25 +1,16 @@
 const { AppError } = require('../utils/errors');
-
-let notas = [];
+const notas = new Map();
 let nextId = 1;
-
-const listar = () => notas;
-
+const listar = () => [...notas.values()];
 function buscar(id) {
-  const n = notas.find((n) => n.id === id);
-  if (!n) throw new AppError(404, 'Nota no encontrada');
-  return n;
+  const nota = notas.get(id);
+  if (!nota) throw new AppError(404, 'Nota no encontrada');
+  return nota;
 }
-
 function crear({ titulo, contenido }) {
-  const n = { id: nextId++, titulo, contenido };
-  notas.push(n);
-  return n;
+  const nota = { id: nextId++, titulo, contenido };
+  notas.set(nota.id, nota);
+  return nota;
 }
-
-function eliminar(id) {
-  buscar(id); // Lanza AppError 404 si la nota no existe
-  notas = notas.filter((n) => n.id !== id);
-}
-
+function eliminar(id) { buscar(id); notas.delete(id); }
 module.exports = { listar, buscar, crear, eliminar };

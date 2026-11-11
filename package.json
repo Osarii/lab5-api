@@ -1,31 +1,32 @@
 {
   "name": "lab5-api",
   "version": "1.0.0",
-  "description": "Laboratorio #5: API REST con Express y Swagger integrando la Claude API",
+  "description": "Laboratorio #5: API REST de notas con Express, Swagger y DeepSeek",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "test": "node --test"
   },
   "keywords": [
     "express",
     "swagger",
-    "claude-api",
-    "anthropic",
+    "deepseek",
     "rest-api"
   ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@anthropic-ai/sdk": "^1.8.0",
     "dotenv": "^18.0.10",
     "express": "^5.3.0",
-    "openai": "^7.55.0",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1",
     "zod": "^4.6.7"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
