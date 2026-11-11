@@ -1,0 +1,12 @@
+VAPEKING CR — recursos visuales
+
+productos/
+- dispositivo-pod.png: dispositivo recargable genérico
+- vape-desechable.png: dispositivo desechable genérico
+- liquido-30ml.png: botella genérica para líquido
+- cartuchos-repuesto.png: dos cartuchos genéricos
+- cable-usb-c.png: cable de carga USB-C
+
+propuesta-homepage.png: mockup visual de referencia para la página de inicio.
+
+Las imágenes de productos son ilustraciones generadas por IA y no representan modelos, marcas, especificaciones ni empaques reales. Sustitúyelas por fotografías exactas del producto que vendas antes de publicar. Para usar en HTML, conserva la ruta relativa productos/nombre.png. La propuesta visual incluye indicación 18+ y no usa logos de terceros.
