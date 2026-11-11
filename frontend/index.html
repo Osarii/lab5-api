@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/local-assets.css">
+  <link rel="stylesheet" href="css/backend-ui.css">
 </head>
 <body>
   <div class="age-gate" id="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-title">
@@ -31,6 +32,7 @@
       <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
       <nav class="main-nav" id="main-nav" aria-label="Navegación principal">
         <a href="#inicio">Inicio</a><a href="#tienda">Tienda</a><a href="#marcas">Marcas</a><a href="#nuevos">Nuevos</a><a href="#ofertas">Ofertas</a><a href="#contacto">Contacto</a>
+        <button class="nav-ai-pill" id="nav-sommelier-open" type="button">✨ Sommelier IA</button>
       </nav>
       <div class="header-actions">
         <button class="header-icon" id="search-open" aria-label="Buscar productos"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 5 5"></path></svg></button>
@@ -71,6 +73,181 @@
   <aside class="cart-drawer" id="cart-drawer" aria-hidden="true"><div class="cart-backdrop" data-close-cart></div><div class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title"><div class="cart-header"><h2 id="cart-title">Tu carrito <span id="cart-title-count">(0)</span></h2><button class="modal-close" data-close-cart aria-label="Cerrar carrito">×</button></div><div class="cart-items" id="cart-items"></div><div class="cart-footer"><div><span>Subtotal</span><strong id="cart-subtotal">₡0</strong></div><p id="shipping-message">Envío gratis en compras mayores a ₡10.000</p><button class="button button--primary" id="checkout-button">Finalizar compra <span>→</span></button></div></div></aside>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Botón Flotante Sommelier IA -->
+  <button class="ai-sommelier-trigger" id="sommelier-open" aria-label="Consultar al Sommelier IA">
+    <span class="ai-sparkle">✨</span>
+    <span>Sommelier IA</span>
+  </button>
+
+  <!-- Modal de Checkout / Finalizar Compra -->
+  <div class="vk-modal" id="checkout-modal" aria-hidden="true">
+    <div class="vk-modal__backdrop" data-close-checkout></div>
+    <div class="vk-modal__panel" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+      <div class="vk-modal__header">
+        <div>
+          <span class="eyebrow">ORDEN DE COMPRA</span>
+          <h2 id="checkout-title">Finalizar Compra</h2>
+          <p>Completá tus datos para el envío a cualquier parte de Costa Rica.</p>
+        </div>
+        <button class="vk-modal__close" data-close-checkout aria-label="Cerrar checkout">×</button>
+      </div>
+
+      <div id="checkout-form-container">
+        <form id="checkout-form">
+          <div class="vk-form-grid">
+            <div class="vk-field full-width">
+              <label for="order-nombre">Nombre Completo *</label>
+              <input type="text" id="order-nombre" required minlength="3" placeholder="Ej: Carlos Mora Pérez">
+            </div>
+            <div class="vk-field">
+              <label for="order-telefono">Teléfono / WhatsApp *</label>
+              <input type="tel" id="order-telefono" required minlength="8" placeholder="Ej: 8888-1234">
+            </div>
+            <div class="vk-field">
+              <label for="order-email">Correo Electrónico *</label>
+              <input type="email" id="order-email" required placeholder="cliente@ejemplo.com">
+            </div>
+            <div class="vk-field full-width">
+              <label for="order-direccion">Dirección Exacta de Entrega *</label>
+              <input type="text" id="order-direccion" required minlength="5" placeholder="Ej: San Pedro, 200m este del parque, casa blanca">
+            </div>
+            <div class="vk-field">
+              <label for="order-provincia">Provincia *</label>
+              <select id="order-provincia" required>
+                <option value="San José">San José</option>
+                <option value="Alajuela">Alajuela</option>
+                <option value="Cartago">Cartago</option>
+                <option value="Heredia">Heredia</option>
+                <option value="Guanacaste">Guanacaste</option>
+                <option value="Puntarenas">Puntarenas</option>
+                <option value="Limón">Limón</option>
+              </select>
+            </div>
+            <div class="vk-field">
+              <label for="order-metodo">Método de Pago *</label>
+              <select id="order-metodo" required>
+                <option value="SINPE">SINPE Móvil (Recomendado)</option>
+                <option value="TARJETA">Tarjeta de Débito/Crédito</option>
+                <option value="CONTRA_ENTREGA">Contra Entrega</option>
+              </select>
+            </div>
+            <div class="vk-field full-width">
+              <label for="order-notas">Notas o Instrucciones Especiales</label>
+              <input type="text" id="order-notas" placeholder="Ej: Tocar el timbre portón negro...">
+            </div>
+          </div>
+
+          <div class="vk-checkout-summary">
+            <h4>Resumen del Pedido</h4>
+            <div class="vk-checkout-row">
+              <span>Productos (<span id="summary-items-count">0</span>)</span>
+              <strong id="summary-subtotal">₡0</strong>
+            </div>
+            <div class="vk-checkout-row">
+              <span>Envío</span>
+              <strong id="summary-shipping">Gratis</strong>
+            </div>
+            <div class="vk-checkout-row total-row">
+              <span>Total a Pagar</span>
+              <strong id="summary-total">₡0</strong>
+            </div>
+          </div>
+
+          <button type="submit" class="button button--primary full-width" id="order-submit-btn" style="width:100%">
+            Confirmar y Enviar Pedido <span>→</span>
+          </button>
+        </form>
+      </div>
+
+      <div id="checkout-success-container" hidden>
+        <div class="vk-order-success">
+          <div class="vk-success-icon">🎉</div>
+          <span class="eyebrow">¡PEDIDO RECIBIDO CON ÉXITO!</span>
+          <h2>Gracias por tu compra</h2>
+          <p>Tu orden ha sido registrada en nuestro sistema.</p>
+          <div class="vk-order-code" id="confirmed-order-code">VK-CR-XXXX</div>
+
+          <div class="vk-sinpe-card" id="confirmed-payment-box">
+            <h4>📱 Instrucciones de Pago SINPE Móvil</h4>
+            <p>1. Ingresá a la app de tu banco y seleccioná <strong>SINPE Móvil</strong>.</p>
+            <p>2. Número destino: <strong>8888-8888</strong> (VapeKing CR).</p>
+            <p>3. Monto exacto: <strong id="confirmed-order-total">₡0</strong>.</p>
+            <p>4. Detalle de transferencia: <strong id="confirmed-order-detail">VK-CR-XXXX</strong>.</p>
+            <p style="margin-top:10px; font-size:11px; color:var(--text-muted);">
+              Una vez realizado el SINPE, te enviaremos el comprobante y número de tracking por WhatsApp y correo.
+            </p>
+          </div>
+
+          <button class="button button--outline" data-close-checkout style="width:100%">Cerrar y seguir explorando</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Sommelier Virtual VapeBot CR (DeepSeek) -->
+  <div class="vk-modal" id="sommelier-modal" aria-hidden="true">
+    <div class="vk-modal__backdrop" data-close-sommelier></div>
+    <div class="vk-modal__panel" role="dialog" aria-modal="true" aria-labelledby="sommelier-title">
+      <div class="vk-modal__header">
+        <div>
+          <span class="eyebrow">ASESOR VIRTUAL INTELIGENTE</span>
+          <h2 id="sommelier-title">VapeBot CR · Sommelier IA</h2>
+          <p>¿Indeciso sobre qué vape, sabor o pod elegir? Consultale a nuestra IA experta.</p>
+        </div>
+        <button class="vk-modal__close" data-close-sommelier aria-label="Cerrar sommelier">×</button>
+      </div>
+
+      <div class="ai-chips-group">
+        <button class="ai-chip" data-ai-prompt="Recomendame un pod kit recargable para principiantes">Pod para principiantes</button>
+        <button class="ai-chip" data-ai-prompt="Busco un vape desechable frutal con más de 5000 caladas">Desechable frutal 5K+</button>
+        <button class="ai-chip" data-ai-prompt="¿Cuáles sales de nicotina mentoladas me recomiendas?">Sales mentoladas</button>
+        <button class="ai-chip" data-ai-prompt="¿Qué tienen en la colección Wax y cómo funcionan?">Colección Wax</button>
+      </div>
+
+      <div class="ai-chat-box" id="ai-chat-box">
+        <div class="ai-msg ai-msg--bot">
+          ¡Hola! Soy <strong>VapeBot CR</strong>, tu Sommelier Virtual de VapeKing con inteligencia artificial. 💨
+          <br><br>
+          Decime qué tipo de sabor te gusta, tu nivel de experiencia o presupuesto, y te recomendaré la mejor opción de nuestro catálogo costarricense.
+        </div>
+      </div>
+
+      <form class="ai-input-form" id="ai-input-form">
+        <input type="text" id="ai-user-query" placeholder="Escribí tu pregunta o gusto (ej: busco algo dulce y portátil)..." required minlength="3">
+        <button type="submit" id="ai-submit-btn">Preguntar ➔</button>
+      </form>
+
+      <div class="ai-powered-by">
+        <span>⚡ Respuestas generadas en tiempo real para mayores de 18 años</span>
+        <span class="ai-badge">DeepSeek V3</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Resumen Técnico IA -->
+  <div class="vk-modal" id="resumen-modal" aria-hidden="true">
+    <div class="vk-modal__backdrop" data-close-resumen></div>
+    <div class="vk-modal__panel" role="dialog" aria-modal="true" aria-labelledby="resumen-title">
+      <div class="vk-modal__header">
+        <div>
+          <span class="eyebrow">ANÁLISIS TÉCNICO CON IA</span>
+          <h2 id="resumen-title">Ficha Técnica IA</h2>
+          <p id="resumen-subtitle">Generando análisis experto con DeepSeek...</p>
+        </div>
+        <button class="vk-modal__close" data-close-resumen aria-label="Cerrar ficha">×</button>
+      </div>
+
+      <div class="ai-product-summary-box" id="resumen-content">
+        Analizando especificaciones con el motor DeepSeek...
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
+        <button class="button button--outline" data-close-resumen>Volver</button>
+        <button class="button button--primary" id="resumen-add-cart">Agregar al carrito <span>+</span></button>
+      </div>
+    </div>
+  </div>
   <script src="js/data.js" defer></script><script src="js/cart.js" defer></script><script src="js/favorites.js" defer></script><script src="js/filters.js" defer></script><script src="js/ui.js" defer></script><script src="js/app.js" defer></script>
 </body>
 </html>
