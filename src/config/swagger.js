@@ -11,6 +11,43 @@ module.exports = swaggerJsdoc({
     servers: [{ url: 'http://localhost:3000' }],
     components: {
       schemas: {
+        Nota: {
+          type: 'object',
+          required: ['id', 'titulo', 'contenido'],
+          properties: {
+            id: {
+              type: 'integer',
+              example: 1,
+              description: 'Identificador único de la nota',
+            },
+            titulo: {
+              type: 'string',
+              example: 'Recordatorio de reunión',
+              description: 'Título de la nota (máx 100 caracteres)',
+            },
+            contenido: {
+              type: 'string',
+              example: 'Revisar avance del laboratorio 5 con el equipo',
+              description: 'Cuerpo de la nota (máx 5000 caracteres)',
+            },
+          },
+        },
+        NotaInput: {
+          type: 'object',
+          required: ['titulo', 'contenido'],
+          properties: {
+            titulo: {
+              type: 'string',
+              example: 'Recordatorio de reunión',
+              description: 'Título de la nota (1 a 100 caracteres)',
+            },
+            contenido: {
+              type: 'string',
+              example: 'Revisar avance del laboratorio 5 con el equipo',
+              description: 'Cuerpo de la nota (1 a 5000 caracteres)',
+            },
+          },
+        },
         Pregunta: {
           type: 'object',
           required: ['pregunta'],
@@ -18,6 +55,7 @@ module.exports = swaggerJsdoc({
             pregunta: {
               type: 'string',
               example: '¿Qué es una API REST y cómo funciona?',
+              description: 'Pregunta libre para enviar al modelo Claude',
             },
           },
         },
