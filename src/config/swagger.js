@@ -4,9 +4,9 @@ module.exports = swaggerJsdoc({
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Lab 5: Notas + IA',
+      title: 'Lab 5: Notas + IA (DeepSeek)',
       version: '1.0.0',
-      description: 'API REST con Express y Swagger integrando la Claude API (Guía de trabajo en parejas)',
+      description: 'API REST con Express y Swagger integrando DeepSeek API (Guía de trabajo en parejas)',
     },
     servers: [{ url: 'http://localhost:3000' }],
     components: {
@@ -55,7 +55,7 @@ module.exports = swaggerJsdoc({
             pregunta: {
               type: 'string',
               example: '¿Qué es una API REST y cómo funciona?',
-              description: 'Pregunta libre para enviar al modelo Claude',
+              description: 'Pregunta libre para enviar al modelo DeepSeek',
             },
           },
         },
