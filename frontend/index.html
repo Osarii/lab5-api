@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VapeKing CR: dispositivos, líquidos, sales y accesorios para vapear con estilo.">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>VapeKing CR — Vapea con estilo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/local-assets.css">
+</head>
+<body>
+  <div class="age-gate" id="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-title">
+    <div class="age-gate__card">
+      <span class="brand brand--large"><span>VAPE</span>KING <small>CR</small></span>
+      <h2 id="age-title">¿Sos mayor de edad?</h2>
+      <p>Este sitio contiene productos relacionados con vapeo. Debés tener 18 años o más para continuar.</p>
+      <div class="age-gate__actions"><button class="button button--primary" id="age-yes">Sí, soy mayor</button><button class="button button--ghost" id="age-no">Salir</button></div>
+      <small class="age-gate__note">VapeKing CR promueve el consumo responsable.</small>
+    </div>
+  </div>
+
+  <div class="topbar"><div class="container topbar__inner"><span>🚚 Envío gratis en compras mayores a ₡10.000</span><div class="topbar__tools"><button type="button">ES</button><span>/</span><button type="button">EN</button><span class="topbar__divider"></span><button type="button">₡ CRC</button><span>/</span><button type="button">$ USD</button></div></div></div>
+
+  <header class="site-header" id="site-header">
+    <div class="container header__inner">
+      <a class="brand" href="#inicio" aria-label="VapeKing CR inicio"><span>VAPE</span>KING <small>CR</small></a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+      <nav class="main-nav" id="main-nav" aria-label="Navegación principal">
+        <a href="#inicio">Inicio</a><a href="#tienda">Tienda</a><a href="#marcas">Marcas</a><a href="#nuevos">Nuevos</a><a href="#ofertas">Ofertas</a><a href="#contacto">Contacto</a>
+      </nav>
+      <div class="header-actions">
+        <button class="header-icon" id="search-open" aria-label="Buscar productos"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 5 5"></path></svg></button>
+        <button class="header-icon header-icon--desktop" aria-label="Mi cuenta"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20c.8-3.2 3-5 7-5s6.2 1.8 7 5"></path></svg></button>
+        <button class="header-icon" id="favorites-open" aria-label="Favoritos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.8c0 5.5-8.8 10-8.8 10s-8.8-4.5-8.8-10A4.7 4.7 0 0 1 12 6a4.7 4.7 0 0 1 8.8 2.8Z"></path></svg><b class="counter" id="favorites-count">0</b></button>
+        <button class="header-icon" id="cart-open" aria-label="Abrir carrito"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 1.9-1.5L21 8H6"></path><circle cx="10" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle></svg><b class="counter" id="cart-count">0</b></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero__pattern" aria-hidden="true"></div><div class="container hero__content">
+        <span class="eyebrow">🔥 NUEVA COLECCIÓN 2025</span><h1>Vapea con<br><span>estilo.</span> Vapea<br>con poder.</h1><p>Dispositivos, líquidos y accesorios seleccionados para quienes hacen las cosas a su manera.</p><div class="hero__actions"><a class="button button--primary" href="#tienda">Comprar ahora <span>→</span></a><a class="button button--outline" href="#categorias">Ver catálogo <span>↘</span></a></div>
+      </div><a href="#marcas" class="scroll-cue" aria-label="Bajar a explorar"><span></span>SCROLL</a>
+    </section>
+
+    <section class="brands section" id="marcas"><div class="container"><div class="section-heading section-heading--center"><span class="eyebrow">CONOCÉ A LOS FAVORITOS</span><h2>Explorá por <em>marca</em></h2></div><div class="brands-grid" id="brands-grid"></div></div></section>
+
+    <section class="section section--surface" id="nuevos"><div class="container"><div class="section-heading"><div><span class="eyebrow">LO ÚLTIMO EN LLEGAR</span><h2>Recién <em>llegados</em></h2></div><a class="section-link" href="#tienda">Ver todos <span>→</span></a></div><div class="product-carousel"><button class="carousel-arrow carousel-arrow--prev" id="new-prev" aria-label="Productos anteriores">‹</button><div class="product-row" id="new-products"></div><button class="carousel-arrow carousel-arrow--next" id="new-next" aria-label="Productos siguientes">›</button></div></div></section>
+
+    <section class="benefits section"><div class="container benefits-grid"><article><div class="benefit-icon">⌁</div><h3>¿Ocupás asistencia?</h3><p>Nuestro equipo está listo para ayudarte con cualquier consulta.</p><a href="#contacto">Contactanos →</a></article><article><div class="benefit-icon">◇</div><h3>Rápido & seguro</h3><p>Pagá fácil con SINPE Móvil. Próximamente tarjetas.</p><span class="payment-hint">SINPE · VISA · MC</span></article><article><div class="benefit-icon">%</div><h3>Cupones exclusivos</h3><p>Unite a nuestra lista VIP y recibí ofertas primero.</p><button class="inline-link" data-scroll-newsletter>Unirme →</button></article><article><div class="benefit-icon">▱</div><h3>A todo el país</h3><p>Entregas rápidas en 24–48 horas a todo Costa Rica.</p><span class="free-badge">GRATIS +₡10K</span></article></div></section>
+
+    <span class="anchor-target" id="ofertas" aria-hidden="true"></span><section class="section" id="tienda"><div class="container"><div class="section-heading"><div><span class="eyebrow">ENCONTRÁ TU PRÓXIMO FAVORITO</span><h2>Los más <em>vendidos</em></h2></div><button class="filter-trigger" id="filter-toggle">Filtros <span>≡</span></button></div><div class="shop-controls" id="shop-controls"><div class="category-filters" role="group" aria-label="Filtrar por categoría"><button class="filter-button is-active" data-category="todos">Todos</button><button class="filter-button" data-category="desechables">Desechables</button><button class="filter-button" data-category="liquidos">Líquidos</button><button class="filter-button" data-category="sales">Sales</button><button class="filter-button" data-category="pods">Pods</button><button class="filter-button" data-category="accesorios">Accesorios</button><button class="filter-button" data-category="wax">Wax</button><button class="filter-button" data-category="cannabis">Botánica</button></div><label class="sort-label">Ordenar <select id="sort-products"><option value="featured">Destacados</option><option value="price-low">Precio menor</option><option value="price-high">Precio mayor</option><option value="rating">Mejor valorados</option></select></label></div><div class="products-grid" id="products-grid"></div><div class="no-results" id="no-results" hidden><span>∅</span><h3>No encontramos productos</h3><p>Probá con otra búsqueda o limpiá los filtros.</p><button class="button button--outline" id="clear-filters">Limpiar filtros</button></div></div></section>
+
+    <section class="categories section section--surface" id="categorias"><div class="container"><div class="section-heading section-heading--center"><span class="eyebrow">ENCONTRÁ TU VIBE</span><h2>Explorá por <em>categoría</em></h2></div><div class="categories-grid"><a class="category-card category-card--one" href="#tienda" data-category-link="desechables"><span>01</span><h3>Desechables<br>Vapes</h3><b>Explorar →</b></a><a class="category-card category-card--two" href="#tienda" data-category-link="liquidos"><span>02</span><h3>Líquidos<br>& Sales</h3><b>Explorar →</b></a><a class="category-card category-card--three" href="#tienda" data-category-link="pods"><span>03</span><h3>Pods<br>& Kits</h3><b>Explorar →</b></a><a class="category-card category-card--four" href="#tienda" data-category-link="accesorios"><span>04</span><h3>Accesorios</h3><b>Explorar →</b></a><a class="category-card category-card--wax" href="#wax" data-category-link="wax"><span>05</span><h3>Vaporizadores<br>Wax</h3><b>Explorar →</b></a><a class="category-card category-card--cannabis" href="#botanica" data-category-link="cannabis"><span>06</span><h3>Colección<br>Botánica</h3><b>Explorar →</b></a></div></div></section>
+    <section class="wax-section section" id="wax"><div class="container"><div class="section-heading"><div><span class="eyebrow">NUEVA COLECCIÓN</span><h2>Vaporizadores <em>Wax</em></h2></div><button class="section-link wax-filter-link" data-category-link="wax">Ver en catálogo →</button></div><div class="products-grid" id="wax-products"></div></div></section>
+    <section class="botanical-section section" id="botanica"><div class="container"><div class="section-heading"><div><span class="eyebrow">LÍNEA VISUAL DEMO</span><h2>Colección <em>Botánica</em></h2><p class="section-note">Diseños temáticos para una colección conceptual. Las imágenes no representan contenido ni certificaciones reales.</p></div><button class="section-link wax-filter-link" data-category-link="cannabis">Ver en catálogo →</button></div><div class="products-grid" id="botanical-products"></div></div></section>
+
+    <section class="testimonials section"><div class="container"><div class="section-heading section-heading--center"><span class="eyebrow">LA COMUNIDAD HABLA</span><h2>Lo que dicen <em>nuestros clientes</em></h2></div><div class="testimonial-grid"><article class="testimonial"><div class="testimonial__top"><span class="avatar">JM</span><div><strong>Jorge M.</strong><small>San José, CR</small></div><span class="stars">★★★★★</span></div><p>“La atención fue excelente y el pedido llegó rapidísimo. El dispositivo superó mis expectativas.”</p></article><article class="testimonial"><div class="testimonial__top"><span class="avatar avatar--purple">KA</span><div><strong>Karol A.</strong><small>Heredia, CR</small></div><span class="stars">★★★★★</span></div><p>“Me ayudaron a escoger mi primer pod sin complicarme. La asesoría vale muchísimo.”</p></article><article class="testimonial"><div class="testimonial__top"><span class="avatar avatar--orange">DR</span><div><strong>Diego R.</strong><small>Cartago, CR</small></div><span class="stars">★★★★★</span></div><p>“Siempre tienen sabores nuevos y el proceso de compra es súper sencillo. 100% recomendados.”</p></article></div></div></section>
+
+    <section class="newsletter section" id="newsletter"><div class="container newsletter__inner"><div><span class="eyebrow">NO TE PERDÁS NADA</span><h2>Unite a la lista <em>VIP.</em></h2><p>Recibí lanzamientos, ofertas y cupones antes que nadie.</p></div><form class="newsletter-form" id="newsletter-form"><div class="newsletter-input"><input type="email" id="newsletter-email" placeholder="Tu correo electrónico" aria-label="Tu correo electrónico" required><button aria-label="Suscribirme">→</button></div><label class="check-label"><input type="checkbox" required> Acepto recibir novedades y promociones.</label><p class="form-message" id="newsletter-message" role="status"></p></form></div></section>
+  </main>
+
+  <footer class="site-footer" id="contacto"><div class="container footer-grid"><div class="footer-brand"><a class="brand brand--large" href="#inicio"><span>VAPE</span>KING <small>CR</small></a><p>Tu estilo. Tu nube. Tu elección.</p><div class="socials"><a href="#" aria-label="Instagram">◎</a><a href="#" aria-label="Facebook">f</a><a href="#" aria-label="TikTok">♪</a><a href="#" aria-label="WhatsApp">◌</a></div></div><div><h4>Tienda</h4><a href="#inicio">Inicio</a><a href="#tienda">Tienda</a><a href="#marcas">Marcas</a><a href="#nuevos">Nuevos</a><a href="#ofertas">Ofertas</a></div><div><h4>Ayuda</h4><a href="#contacto">Envíos</a><a href="#contacto">Devoluciones</a><a href="#contacto">Preguntas frecuentes</a><a href="#contacto">Contacto</a></div><div><h4>Visitanos</h4><p>75mts Este, 125mts Sur de la Municipalidad, Guadalupe, Costa Rica.</p><a href="tel:22838572">2283-8572</a><span>info@vapeking.cr</span></div></div><div class="container footer-bottom"><span>© 2025 VapeKing CR · Consumo responsable</span><span>SINPE · VISA · MASTERCARD · PAYPAL</span></div></footer>
+
+  <div class="search-modal" id="search-modal" aria-hidden="true"><div class="search-modal__backdrop" data-close-search></div><div class="search-modal__panel" role="dialog" aria-modal="true" aria-labelledby="search-title"><button class="modal-close" data-close-search aria-label="Cerrar búsqueda">×</button><span class="eyebrow">BUSCAR EN VAPEKING</span><h2 id="search-title">¿Qué estás buscando?</h2><input id="search-input" type="search" placeholder="Nombre o marca..."><div id="search-results"></div></div></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-hidden="true"><div class="cart-backdrop" data-close-cart></div><div class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title"><div class="cart-header"><h2 id="cart-title">Tu carrito <span id="cart-title-count">(0)</span></h2><button class="modal-close" data-close-cart aria-label="Cerrar carrito">×</button></div><div class="cart-items" id="cart-items"></div><div class="cart-footer"><div><span>Subtotal</span><strong id="cart-subtotal">₡0</strong></div><p id="shipping-message">Envío gratis en compras mayores a ₡10.000</p><button class="button button--primary" id="checkout-button">Finalizar compra <span>→</span></button></div></div></aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="js/data.js" defer></script><script src="js/cart.js" defer></script><script src="js/favorites.js" defer></script><script src="js/filters.js" defer></script><script src="js/ui.js" defer></script><script src="js/app.js" defer></script>
+</body>
+</html>

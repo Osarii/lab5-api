@@ -1,0 +1,13 @@
+/* Recursos visuales locales entregados para VapeKing CR. */
+.category-card--one{background-image:url('../assets/productos/vape-desechable.png')}
+.category-card--two{background-image:url('../assets/productos/liquido-30ml.png')}
+.category-card--three{background-image:url('../assets/productos/dispositivo-pod.png')}
+.category-card--four{background-image:url('../assets/productos/cable-usb-c.png')}
+.category-card--wax{background-image:url('../assets/catalogo/productos/wax-vaporizers/04-wax-vaporizer-compacto.png')}
+.category-card--cannabis{background-image:url('../assets/catalogo/productos/botanica/09-caja-y-vape-botanico.png')}
+.wax-section{background:linear-gradient(135deg,#111019,#170e21)}
+.wax-section .product-card{background:#17151f}
+.wax-filter-link{background:none;border:0;cursor:pointer}
+.botanical-section{background:linear-gradient(135deg,#10180f,#171d12)}
+.botanical-section .product-card{background:#151b14}
+.section-note{max-width:620px;color:var(--text-muted);font-size:12px;margin-top:14px}
